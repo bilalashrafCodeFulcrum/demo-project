@@ -10,17 +10,17 @@ import { useForm } from "react-hook-form";
 import HookTextField from "../../shared-compnents/hooks/HookTextField";
 import HookSelect from "../../shared-compnents/hooks/HookSelect";
 import HookCheckbox from "../../shared-compnents/hooks/HookCheckbox";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
-
+import { useSnackbar } from "notistack";
 const genderOptions = [
   {
     label: "Male",
-    value: 'MALE',
+    value: "MALE",
   },
   {
     label: "Female",
-    value: 'FEMALE',
+    value: "FEMALE",
   },
 ];
 
@@ -47,8 +47,10 @@ const patientSchema = yup.object().shape({
 
 export default function AddPatientDialog(props) {
   const { open, handleClose } = props;
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const { control, handleSubmit, formState , reset} = useForm({
+  const { control, handleSubmit, formState, reset } = useForm({
     mode: "onChange",
     defaultValues: patientDefaultValues,
     resolver: yupResolver(patientSchema),
@@ -56,25 +58,31 @@ export default function AddPatientDialog(props) {
   const { errors } = formState;
 
   const onSubmit = (model) => {
-      handleCreate(model)
-      
+    handleCreate(model);
   };
 
-  const onModelClose = ()=>{
-      reset(patientDefaultValues)
-      handleClose()
-  }
+  const onModelClose = () => {
+    reset(patientDefaultValues);
+    handleClose();
+  };
 
-  const {mutate: handleCreate, isLoading} = useMutation('post/patient', (payload)=>axios({
-    url: '/toBeFill',
-    method: 'post',
-    data: payload
-  }), {
-    onSuccess: ()=>{
-      reset(patientDefaultValues)
-      onModelClose()
+  const { mutate: handleCreate, isLoading } = useMutation(
+    "post/patient",
+    (payload) =>
+      axios({
+        url: "/api/patients/",
+        method: "post",
+        data: payload,
+      }),
+    {
+      onSuccess: () => {
+        reset(patientDefaultValues);
+        onModelClose();
+        queryClient.invalidateQueries("get/patients");
+        enqueueSnackbar("Patient Created Successfully", { variant: "success" });
+      },
     }
-  })
+  );
 
   return (
     <div>
@@ -86,42 +94,42 @@ export default function AddPatientDialog(props) {
       >
         <DialogTitle id="alert-dialog-title">Create New Patient</DialogTitle>
         <DialogContent>
-            <form
+          <form
             id="patient-form"
-              className=" space-y-6 w-full mt-6"
-              onSubmit={handleSubmit(onSubmit)}
-            >
-              <HookTextField
-                name="first_name"
-                label="First Name"
-                control={control}
-                errors={errors}
-              />
-              <HookTextField
-                name="last_name"
-                label="Last Name"
-                control={control}
-                errors={errors}
-              />
-              <HookTextField
-                name="phone"
-                label="Phone"
-                control={control}
-                errors={errors}
-              />
-              <HookSelect
-                name="gender"
-                label="Gender"
-                control={control}
-                errors={errors}
-                options={genderOptions}
-              />
-              <HookCheckbox
-                name="isDisabled"
-                label="Are you Disabled?"
-                control={control}
-              />
-            </form>
+            className=" space-y-6 w-full mt-6"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <HookTextField
+              name="first_name"
+              label="First Name"
+              control={control}
+              errors={errors}
+            />
+            <HookTextField
+              name="last_name"
+              label="Last Name"
+              control={control}
+              errors={errors}
+            />
+            <HookTextField
+              name="phone"
+              label="Phone"
+              control={control}
+              errors={errors}
+            />
+            <HookSelect
+              name="gender"
+              label="Gender"
+              control={control}
+              errors={errors}
+              options={genderOptions}
+            />
+            <HookCheckbox
+              name="isDisabled"
+              label="Are you Disabled?"
+              control={control}
+            />
+          </form>
         </DialogContent>
         <DialogActions>
           <Button onClick={onModelClose} variant="outlined" color="primary">
@@ -130,9 +138,9 @@ export default function AddPatientDialog(props) {
           <Button
             variant="contained"
             color="primary"
-            type='submit'
+            type="submit"
             autoFocus
-            form='patient-form'
+            form="patient-form"
             disabled={isLoading}
           >
             Create Patient

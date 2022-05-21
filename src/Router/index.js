@@ -13,9 +13,9 @@ export default function Router() {
         <Route
           path="/patients"
           element={
-          
+            <ProtectedRoute>
               <Patients />
-            
+            </ProtectedRoute>
           }
         />
         <Route path="*" element={<NotFound />} />

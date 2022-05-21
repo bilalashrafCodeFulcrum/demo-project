@@ -8,6 +8,7 @@ import HookTextField from "../../shared-compnents/hooks/HookTextField";
 import { useMutation } from "react-query";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 import { saveToken } from "../../Services";
 
 const loginSchema = yup.object().shape({
@@ -26,6 +27,7 @@ const defaultValues = {
 
 function Login() {
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
   const { control, formState, handleSubmit } = useForm({
     mode: "onChange",
     defaultValues,
@@ -49,8 +51,13 @@ function Login() {
       }),
     {
       onSuccess: (res) => {
-        saveToken(res.data?.token ?? null);
-        navigate("/patients");
+        if (res.data?.token) {
+          saveToken(res.data?.token ?? null);
+          navigate("/patients");
+          enqueueSnackbar("Logged In Successfully", { variant: "success" });
+        } else {
+          enqueueSnackbar(res.data?.Message, { variant: "error" });
+        }
       },
     }
   );

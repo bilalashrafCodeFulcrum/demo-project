@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import store from "./Store";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClientProvider, QueryClient } from "react-query";
+import { SnackbarProvider } from "notistack";
 
 const queryClient = new QueryClient();
 
@@ -16,7 +17,9 @@ root.render(
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <App />
+          <SnackbarProvider maxSnack={3}>
+            <App />
+          </SnackbarProvider>
         </BrowserRouter>
       </QueryClientProvider>
     </Provider>

@@ -8,7 +8,12 @@ import { Avatar } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 
-export default function SingelPatientDialog({ open, handleClose, patientId }) {
+export default function SingelPatientDialog({
+  open,
+  handleClose,
+  patientId,
+  setPatientId,
+}) {
   const [note, setNote] = useState("");
   const queryClient = useQueryClient();
 
@@ -46,11 +51,17 @@ export default function SingelPatientDialog({ open, handleClose, patientId }) {
     }
   };
 
+  const closeModel = () => {
+    setNote("");
+    setPatientId(null);
+    handleClose();
+  };
+
   return (
     <div>
       <Dialog
         open={open}
-        onClose={handleClose}
+        onClose={closeModel}
         fullWidth
         maxWidth="sm"
         aria-labelledby="alert-dialog-title"
@@ -74,13 +85,17 @@ export default function SingelPatientDialog({ open, handleClose, patientId }) {
               </p>
               <p className="text-xs text-gray-500">
                 {" "}
-                Disabled: {singlePatient?.isDisabled ? "Yes" : "No"}{" "}
+                Disabled: {singlePatient?.is_disabled ? "Yes" : "No"}{" "}
               </p>
             </div>
           </div>
 
           <div className="">
             <h2 className="pb-2 border-b border-gray-200">Notes</h2>
+            <div className="text-xs font-bold text-red-600 mt-2">
+              {" "}
+              Hit "Enter" to add notes{" "}
+            </div>
             <input
               className="h-8 w-full border border-gray-300 mt-2 pl-2"
               value={note}
@@ -94,7 +109,7 @@ export default function SingelPatientDialog({ open, handleClose, patientId }) {
             {singlePatient?.notes.map((note) => (
               <div className="flex flex-col space-y-1">
                 <span className="text-sm"> {note.text} </span>
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-gray-400 ">
                   {" "}
                   {/* {moment(note.created).format("DD-MM-YYYY")}{" "} */}
                   {note.created}
@@ -104,7 +119,7 @@ export default function SingelPatientDialog({ open, handleClose, patientId }) {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} autoFocus>
+          <Button onClick={closeModel} autoFocus>
             Close
           </Button>
         </DialogActions>

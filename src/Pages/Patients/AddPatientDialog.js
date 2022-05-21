@@ -30,7 +30,7 @@ const patientDefaultValues = {
   // i will use enum for this
   gender: 1,
   phone: "",
-  isDisabled: false,
+  is_disabled: false,
 };
 
 const phoneRegExp =
@@ -125,7 +125,7 @@ export default function AddPatientDialog(props) {
               options={genderOptions}
             />
             <HookCheckbox
-              name="isDisabled"
+              name="is_disabled"
               label="Are you Disabled?"
               control={control}
             />

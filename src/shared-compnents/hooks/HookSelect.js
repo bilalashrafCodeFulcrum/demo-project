@@ -1,6 +1,6 @@
-import React from 'react';
-import { get } from 'lodash';
-import { Controller } from 'react-hook-form';
+import React from "react";
+import { get } from "lodash";
+import { Controller } from "react-hook-form";
 import {
   FormControl,
   InputLabel,
@@ -8,19 +8,11 @@ import {
   OutlinedInput,
   Select,
   FormHelperText,
-} from '@mui/material';
-
+} from "@mui/material";
 
 export default function HookSelect(props) {
-  const {
-    control,
-    options,
-    name,
-    label,
-    defaultValue,
-    errors,
-    ...rest
-  } = props;
+  const { control, options, name, label, defaultValue, errors, ...rest } =
+    props;
   return (
     <Controller
       name={name}
@@ -35,31 +27,27 @@ export default function HookSelect(props) {
           {...rest}
           variant="outlined"
         >
-          <InputLabel className="text-12" htmlFor="cityId">
+          <InputLabel className="text-12 bg-white px-2" htmlFor="cityId">
             {label}
           </InputLabel>
           <Select
             endAdornment={<SelectIcon />}
             defaultValue={0}
+            label={label}
             {...field}
             input={
               <OutlinedInput
                 inputProps={{
-                  className: 'bg-white',
+                  className: "bg-white",
                 }}
                 labelWidth={label.length * 10}
                 name="group_id"
               />
             }
           >
-            <MenuItem value={0}>
-              Please Select
-            </MenuItem>
+            <MenuItem value={0}>Please Select</MenuItem>
             {options.map((val) => (
-              <MenuItem
-                key={val.value}
-                value={val.value}
-              >
+              <MenuItem key={val.value} value={val.value}>
                 {val.label}
               </MenuItem>
             ))}

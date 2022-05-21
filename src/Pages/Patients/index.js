@@ -51,6 +51,11 @@ export default function Patients() {
   const columns = useMemo(
     () => [
       {
+        Header: "Sr",
+        accessor: "none",
+        Cell: (cell) => <div> {cell.row.index + 1} </div>,
+      },
+      {
         Header: "Name",
         accessor: "first_name",
         Cell: (cell) => (
@@ -72,7 +77,7 @@ export default function Patients() {
       },
       {
         Header: "Disable",
-        accessor: "isDisabled",
+        accessor: "is_disabled",
         Cell: (cell) => (
           <div>
             {" "}
@@ -128,6 +133,7 @@ export default function Patients() {
           open={openDetailView}
           handleClose={() => setOpenDetailView(false)}
           patientId={patientId}
+          setPatientId={setPatientId}
         />
       )}
 

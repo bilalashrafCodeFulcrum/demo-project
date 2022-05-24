@@ -4,9 +4,8 @@ import Router from "./Router";
 import { axiosSetup } from "./Services";
 
 function App() {
-  const initApp = () => {
-    axiosSetup();
-  };
+  axiosSetup();
+  const initApp = () => {};
   useEffect(() => {
     initApp();
   }, []);

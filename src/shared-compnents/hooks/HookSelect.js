@@ -22,7 +22,7 @@ export default function HookSelect(props) {
           fullWidth
           id={name}
           error={Boolean(get(errors, name))}
-          helperText={get(errors, name)?.message}
+          // helperText={get(errors, name)?.message}
           className="mb-24"
           {...rest}
           variant="outlined"

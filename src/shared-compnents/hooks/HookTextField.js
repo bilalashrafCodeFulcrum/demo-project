@@ -26,11 +26,11 @@ export default function HookTextField(props) {
           label={label}
           id={name}
           type={type}
+          key={`${label}-${name}`}
           error={Boolean(get(errors, name))}
           helperText={get(errors, name)?.message}
           variant="outlined"
           fullWidth
-          autoComplete={false}
           InputProps={{
             endAdornment: EndAdornment ? <EndAdornment /> : "",
           }}
